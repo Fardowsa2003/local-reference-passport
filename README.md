@@ -1,6 +1,7 @@
 # Local Reference Passport
 
 **Track 3: Local Networks & Experience** · Power Learn Project Mini-Hackathon
+
 **SDG 8 (Decent Work) · SDG 10 (Reduced Inequalities) · SDG 17 (Partnerships)**
 
 ## The problem
@@ -13,9 +14,12 @@ Local Reference Passport turns small paid tasks into verified proof:
 3. **Show proof:** the refugee gets a passport with verified jobs, local references, work hours, a trust level, a verification code and a visual local-network map.
 
 ## Live demo
-https://claude.ai/artifact/QwiFNpearPTXzvczUKhzKc
+https://fardowsa2003.github.io/local-reference-passport/
 
 Tip: open the Home tab and click **Load demo journey**.
+
+## AI Career Coach (video demo)
+The AI Coach, built with Claude, rewrites a refugee's background and passport into a local-format CV and runs interview practice. It runs inside Claude, so it is shown in a video: [add your YouTube link here]
 
 ## How it meets the evaluation criteria
 - **Credential and skills verification:** every stamp is a task signed by a local business, plus a verification code.
