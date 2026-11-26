@@ -38,13 +38,13 @@ input,textarea,select{padding:9px;border:1px solid var(--line);border-radius:8px
 <nav id="nav"></nav>
 <main id="app"></main>
 <script>
-var KEY="lrp_v2";
+var KEY="lrp_v3";
 var SEED=[
- {id:1,title:"Translate a clinic leaflet (Arabic/French to English)",biz:"CareBridge Clinic",skills:"translation, languages",hours:3,pay:"KES 2,500"},
- {id:2,title:"Build a simple price list in Excel",biz:"Mama Njeri Groceries",skills:"excel, data entry",hours:4,pay:"KES 3,000"},
- {id:3,title:"Design a flyer for a weekend market",biz:"Kawangware Market Assoc.",skills:"design, canva",hours:3,pay:"KES 2,000"},
- {id:4,title:"Fix a small website contact form",biz:"BrightPath Tutors",skills:"html, javascript, web",hours:5,pay:"KES 4,500"},
- {id:5,title:"First aid refresher session for staff",biz:"BuildRight Kenya",skills:"nursing, first aid",hours:2,pay:"KES 3,500"}
+ {id:1,title:"Translate a health leaflet (Somali or Arabic to English)",biz:"Camp Health Partner",skills:"translation, languages",hours:3,pay:"KES 2,500"},
+ {id:2,title:"Build a simple price list in Excel for a shop",biz:"Camp Market Shop",skills:"excel, data entry",hours:4,pay:"KES 3,000"},
+ {id:3,title:"Design a flyer for a community event",biz:"Community Youth Group",skills:"design, canva",hours:3,pay:"KES 2,000"},
+ {id:4,title:"Fix a small website contact form (remote)",biz:"Remote Client",skills:"html, javascript, web",hours:5,pay:"KES 4,500"},
+ {id:5,title:"First aid refresher session for volunteers",biz:"Community Volunteers Group",skills:"nursing, first aid",hours:2,pay:"KES 3,500"}
 ];
 var S=load();
 function fresh(){return {profile:null,tasks:SEED.slice(),mine:[],nextId:6,view:"home"}}
@@ -58,7 +58,7 @@ function skills(str){return String(str).split(",").map(function(s){return '<span
 function done(){return S.mine.filter(function(m){return m.status==="endorsed"})}
 
 function render(){
-  var tabs=[["home","Home"],["tasks","Micro-tasks"],["mine","My work"],["biz","Businesses"],["pass","My passport"],["coach","AI Coach"],["about","Impact"]];
+  var tabs=[["home","Home"],["tasks","Micro-tasks"],["mine","My work"],["biz","Endorsers"],["pass","My passport"],["coach","AI Coach"],["about","Impact"]];
   document.getElementById("nav").innerHTML=tabs.map(function(t){return '<button class="'+(S.view===t[0]?"on":"")+'" onclick="go(\''+t[0]+'\')">'+t[1]+'</button>'}).join("");
   var v=S.view,h="";
   if(v==="home")h=homeView();
@@ -74,7 +74,7 @@ function render(){
 function homeView(){
   return '<div class="hero"><p><span class="sdg">SDG 8</span><span class="sdg">SDG 10</span><span class="sdg">SDG 17</span></p>'+
   '<h2>Skilled refugees do not lack talent. They lack a local reference.</h2>'+
-  '<p>Employers ask for local experience, but you cannot get it without a job. The Local Reference Passport breaks that loop: do small paid tasks for neighbourhood businesses, earn a signed reference each time, and build a verified local network employers can trust.</p>'+
+  '<p>Employers ask for local experience, but you cannot get it without a job. The Local Reference Passport breaks that loop: do small paid tasks for neighbourhood businesses, earn a signed reference each time, and build a verified local network employers can trust.</p>'+'<p class="mute">Built for people in Dadaab and similar settings: it works on a phone, references can come from schools, health centres, NGOs, community groups and shops, and a passport can be shared as a WhatsApp message.</p>'+
   '<div class="btnrow"><button class="btn" onclick="go(\'tasks\')">Start my passport</button><button class="btn alt" onclick="demo()">Load demo journey</button></div></div>'+
   '<div class="grid"><div class="card"><h3>1. Work</h3><p class="mute">Take paid micro-tasks matched to your skills.</p></div>'+
   '<div class="card"><h3>2. Get endorsed</h3><p class="mute">Businesses vouch for you and can offer a warm introduction.</p></div>'+
@@ -84,8 +84,8 @@ function demo(){
   S=fresh();
   S.profile={name:"Amina Hassan",prof:"Registered Nurse",skills:"nursing, first aid, languages, translation",country:"Somalia"};
   S.mine=[
-   {taskId:1,status:"endorsed",note:"Accurate, clear and finished a day early. Our patients now understand the leaflet.",by:"Dr. Wanjiru, CareBridge Clinic",date:"12/11/2026",intro:"Head nurse at Kenyatta Hospital"},
-   {taskId:5,status:"endorsed",note:"Calm, professional trainer. Staff asked for a second session.",by:"Peter Otieno, BuildRight Kenya",date:"18/11/2026",intro:"Safety officer at a partner construction firm"},
+   {taskId:1,status:"endorsed",note:"Accurate, clear and finished a day early. Our patients now understand the leaflet.",by:"Health Centre Supervisor, Camp Health Partner",date:"12/11/2026",intro:"Community health programme coordinator"},
+   {taskId:5,status:"endorsed",note:"Calm, professional trainer. Staff asked for a second session.",by:"Volunteer Group Lead, Community Volunteers Group",date:"18/11/2026",intro:"Remote training coordinator at a partner NGO"},
    {taskId:2,status:"requested",note:"",by:"",date:"",intro:""}];
   S.view="pass";save();render();
 }
@@ -107,7 +107,7 @@ function fit(t){
 }
 function tasksView(){
   var list=S.tasks.slice().sort(function(a,b){return fit(b)-fit(a)});
-  var h='<h2>Paid micro-tasks from local businesses</h2><p class="mute">Small jobs, real pay, and a reference when you finish. Best skill matches come first.</p><div class="grid">';
+  var h='<h2>Paid micro-tasks from local businesses</h2><p class="mute">Small jobs, real pay, and a reference when you finish. Best skill matches come first. These are sample tasks for demonstration.</p><div class="grid">';
   list.forEach(function(t){
     var m=mineFor(t.id),f=fit(t);
     h+='<div class="card"><h3>'+esc(t.title)+'</h3><p class="mute">'+esc(t.biz)+' · about '+t.hours+' hrs · '+esc(t.pay)+'</p><p>'+skills(t.skills)+'</p>'+
@@ -125,14 +125,14 @@ function mineView(){
     var st={doing:"In progress",requested:"Waiting for endorsement",endorsed:"Endorsed ✓"}[m.status];
     h+='<div class="card"><span class="tag">'+st+'</span><h3>'+esc(t.title)+'</h3><p class="mute">'+esc(t.biz)+'</p>'+
     (m.status==="doing"?'<button class="btn" onclick="finish('+t.id+')">Mark done and request endorsement</button>':"")+
-    (m.status==="requested"?'<p class="mute">Ask '+esc(t.biz)+' to open the Businesses tab and endorse you.</p>':"")+
+    (m.status==="requested"?'<p class="mute">Ask '+esc(t.biz)+' to open the Endorsers tab and endorse you.</p>':"")+
     (m.status==="endorsed"?'<p>“'+esc(m.note)+'”</p><p class="mute">— '+esc(m.by)+', '+esc(m.date)+'</p>':"")+'</div>';
   });
   return h+'</div>';
 }
 function finish(id){mineFor(id).status="requested";save();render()}
 function bizView(){
-  var h='<h2>For businesses</h2><p class="mute">Post a small task, endorse the people who complete it, and open your network to them.</p>';
+  var h='<h2>For endorsers</h2><p class="mute">Schools, health centres, NGOs, community groups and shops can post small tasks, endorse the people who complete them, and open their network to them.</p>';
   var pend=S.mine.filter(function(m){return m.status==="requested"});
   h+='<h3>Endorsements waiting ('+pend.length+')</h3>';
   if(!pend.length)h+='<p class="empty">Nothing waiting.</p>';
@@ -144,7 +144,7 @@ function bizView(){
     '<label>I can introduce them to (optional)<input name="intro" placeholder="e.g. HR manager at a partner hospital"></label><button class="btn">Endorse</button></form></div>';
   });
   h+='<h3 style="margin-top:24px">Post a new micro-task</h3><form onsubmit="return addTask(this)">'+
-  '<label>Task<input name="title" required></label><label>Business name<input name="biz" required></label>'+
+  '<label>Task<input name="title" required></label><label>Organisation or business name<input name="biz" required></label>'+
   '<label>Skills needed (comma separated)<input name="skills" required></label>'+
   '<label>Hours<input name="hours" type="number" min="1" value="3"></label><label>Pay<input name="pay" placeholder="KES 3,000"></label>'+
   '<button class="btn">Post task</button></form>';
@@ -171,8 +171,8 @@ function netMap(){
     var a=(i/Math.max(n,1))*Math.PI*2-Math.PI/2,x=cx+Math.cos(a)*120,y=cy+Math.sin(a)*100;
     out+='<line x1="'+cx+'" y1="'+cy+'" x2="'+x+'" y2="'+y+'" stroke="var(--teal)" stroke-width="2"/>';
     if(m.intro){var x2=cx+Math.cos(a)*215,y2=cy+Math.sin(a)*140;
-      out+='<line x1="'+x+'" y1="'+y+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--brand)" stroke-dasharray="4 3"/><circle cx="'+x2+'" cy="'+y2+'" r="7" fill="none" stroke="var(--brand)" stroke-width="2"/><text x="'+x2+'" y="'+(y2+(y2>cy?20:-12))+'" text-anchor="middle">'+esc(m.intro.slice(0,26))+'</text>';}
-    out+='<circle cx="'+x+'" cy="'+y+'" r="13" fill="var(--teal)"/><text x="'+x+'" y="'+(y+(y>cy?28:-20))+'" text-anchor="middle">'+esc(task(m.taskId).biz.slice(0,22))+'</text>';
+      out+='<line x1="'+x+'" y1="'+y+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--brand)" stroke-dasharray="4 3"/><circle cx="'+x2+'" cy="'+y2+'" r="7" fill="none" stroke="var(--brand)" stroke-width="2"/><text x="'+x2+'" y="'+(y2+(y2>cy?20:-12))+'" text-anchor="middle">'+esc(m.intro.slice(0,36))+'</text>';}
+    out+='<circle cx="'+x+'" cy="'+y+'" r="13" fill="var(--teal)"/><text x="'+x+'" y="'+(y+(y>cy?28:-20))+'" text-anchor="middle">'+esc(task(m.taskId).biz.slice(0,30))+'</text>';
   });
   out+='<circle cx="'+cx+'" cy="'+cy+'" r="26" fill="var(--brand)"/><text x="'+cx+'" y="'+(cy+4)+'" text-anchor="middle" style="fill:#fff;font-weight:700">You</text></svg>';
   return out;
@@ -189,7 +189,7 @@ function passView(){
   if(!d.length)h+='<p class="empty">Complete and get endorsed on a task to add your first stamp.</p>';
   d.forEach(function(m){var t=task(m.taskId);
     h+='<div class="stamp"><b>'+esc(t.title)+'</b><div class="mute">'+esc(t.biz)+' · '+t.hours+' hrs</div><div>“'+esc(m.note)+'”</div><div class="mute">— '+esc(m.by)+', '+esc(m.date)+'</div>'+(m.intro?'<div class="mute">🤝 Offers introduction: '+esc(m.intro)+'</div>':"")+'</div>'});
-  h+='</div><p class="noprint" style="margin-top:14px"><button class="btn" onclick="window.print()">Print or save as PDF</button> <button class="btn alt" onclick="resetAll()">Reset</button></p>';
+  h+='</div><p class="noprint" style="margin-top:14px"><button class="btn" onclick="wa()">Share on WhatsApp</button> <button class="btn alt" onclick="window.print()">Print or save as PDF</button> <button class="btn alt" onclick="resetAll()">Reset</button></p>';
   return h;
 }
 function coachBg(){
@@ -200,7 +200,7 @@ function coachBg(){
 }
 function coachView(){
   return '<h2>AI Career Coach</h2><p class="mute">Turn your background and passport into a local-format CV, or practise the interview. Powered by Claude.</p>'+
-  '<form onsubmit="return false"><label>Target role<input id="cRole" placeholder="e.g. Nurse at a private clinic in Nairobi"></label>'+
+  '<form onsubmit="return false"><label>Target role<input id="cRole" placeholder="e.g. Community health worker with an NGO, or a remote job"></label>'+
   '<label>Your background<textarea id="cBg" rows="7" placeholder="Describe your education, past jobs and skills">'+esc(coachBg())+'</textarea></label>'+
   '<div class="btnrow"><button type="button" class="btn" onclick="runCoach(\'cv\')">Localize my CV</button><button type="button" class="btn alt" onclick="runCoach(\'int\')">Practise interview</button></div></form>'+
   '<div id="cOut" class="card" style="white-space:pre-wrap;display:none;margin-top:12px"></div>';
@@ -210,12 +210,17 @@ async function runCoach(mode){
   var out=document.getElementById("cOut");out.style.display="block";
   if(!bg){out.textContent="Please add your background first.";return}
   out.textContent="Thinking…";
-  var base="You are a warm, practical career coach helping a skilled refugee professional find work in Nairobi, Kenya. Use simple English. Never invent facts: if something is missing, write [add detail]. Plain text only, no markdown symbols.\nTarget role: "+role+"\nCandidate background:\n"+bg+"\n\n";
+  var base="You are a warm, practical career coach helping a skilled refugee professional find work in Kenya, including camp-based, community and remote work (for example from Dadaab refugee camp). Do not claim the person has legal work authorization; say refugee work and movement rules should be confirmed with the relevant authorities. Use simple English. Never invent facts: if something is missing, write [add detail]. Plain text only, no markdown symbols.\nTarget role: "+role+"\nCandidate background:\n"+bg+"\n\n";
   var ask=mode==="cv"?"Task: rewrite this into a clear one-page CV in the Kenyan format (profile summary, key skills, experience with achievement bullets, education, referees). Treat the local experience and references as proof of local work. Then give 3 short tips on how to explain foreign qualifications to Kenyan employers.":"Task: give 5 likely interview questions for this role in Kenya. For each, give a short outline of a strong answer using the candidate's real background. Finish with 2 smart questions the candidate can ask the employer.";
   var sample=null;try{if(window.claude)sample=await window.claude.use("sample")}catch(e){}
   if(!sample){out.textContent="The AI coach works when this page is opened from its Claude link.";return}
   try{await sample(base+ask,{onText:function(r){out.textContent=r.text}})}
   catch(e){out.textContent=(e&&e.code==="not_granted")?"Permission was declined, so the coach is switched off.":"The coach is busy right now. Please try again in a moment."}
+}
+function wa(){
+  var p=S.profile,d=done();
+  var t="Local Reference Passport\n"+p.name+" · "+p.prof+"\nVerification code: "+vcode()+"\nVerified local jobs: "+d.length+"\n"+d.map(function(m){var k=task(m.taskId);return "- "+k.title+" ("+k.biz+"): \""+m.note+"\" — "+m.by}).join("\n")+"\nSkills: "+p.skills;
+  window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank");
 }
 function aboutView(){
   var c=[["Credential and skills verification","Every stamp is a real task signed by a local business, plus a unique verification code on the passport."],
@@ -225,7 +230,7 @@ function aboutView(){
   ["Sustainability and scalability","Zero heavy overhead: any city, sector or NGO can run it. Businesses self-serve, and each endorsement opens new introductions."]];
   var h='<h2>Why this works (Track 3)</h2><p class="mute">The “local experience” gap is really a trust gap. This project turns work into proof and proof into network.</p>';
   c.forEach(function(x,i){h+='<div class="crit"><b>'+(i+1)+'. '+x[0]+'</b><div class="mute">'+x[1]+'</div></div>'});
-  return h+'<h3>What makes it different</h3><p>Most platforms match people to jobs. This one builds the missing asset itself: portable, verifiable local references and a visible network, so the person owns their proof.</p>';
+  return h+'<h3>What makes it different</h3><p>Most platforms match people to jobs. This one builds the missing asset itself: portable, verifiable local references and a visible network, so the person owns their proof. For Dadaab and similar settings, the biggest barrier is having no local references or contacts, so every endorsement from a school, clinic, NGO, group or shop becomes a portable reference.</p>';
 }
 function resetAll(){if(confirm("Clear everything and start over?")){try{localStorage.removeItem(KEY)}catch(e){}S=fresh();render()}}
 render();
