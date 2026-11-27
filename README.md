@@ -18,9 +18,9 @@ https://fardowsa2003.github.io/local-reference-passport/
 
 Tip: open the Home tab and click **Load demo journey**.
 
-## AI Career Coach (video demo)
-The AI Coach, built with Claude, rewrites a refugee's background and passport into a local-format CV and runs interview practice. It runs inside Claude, so it is shown in a video: [add your YouTube link here]
-
+## AI Career Coach 
+The AI Coach, built with Claude, rewrites a refugee's background and passport into a local-format CV and runs interview practice. It runs inside Claude, so it does not work on this GitHub page. It never invents facts: missing details are marked [add detail] for the person to fill in
+## How it meets 
 ## How it meets the evaluation criteria
 - **Credential and skills verification:** every stamp is a task signed by a local business, plus a verification code.
 - **Access and compliance readiness:** paid micro-tasks give a safe first step with a clear record of hours and pay.
